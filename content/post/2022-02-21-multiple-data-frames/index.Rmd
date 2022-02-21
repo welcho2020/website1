@@ -202,6 +202,6 @@ hotels %>%
     mean_adr = mean(adr),
     median_adr = median(adr),
     max_adr = max(adr)
-    )
+    )it 
 ```
 

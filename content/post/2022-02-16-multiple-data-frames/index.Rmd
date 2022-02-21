@@ -6,3 +6,88 @@ slug: multiple-data-frames
 categories: []
 tags: []
 ---
+```{r}
+url <- 'https://raw.githubusercontent.com/dearbharat/tidyverse/main/professions.csv'
+professions <- read_csv(url)
+```
+```{r}
+url <- 'https://raw.githubusercontent.com/dearbharat/tidyverse/main/dates.csv'
+dates <- read_csv(url)
+```
+```{r}
+url <- 'https://raw.githubusercontent.com/dearbharat/tidyverse/main/works.csv'
+works <- read_csv(url)
+```
+```{r}
+professions %>%
+  left_join(dates)
+```
+```{r}
+professions %>%
+  right_join(dates)
+```
+```{r}
+dates %>%
+  full_join(works)
+```
+```{r}
+dates %>%
+  inner_join(works)
+```
+```{r}
+dates %>%
+  semi_join(works)
+```
+```{r}
+dates %>%
+  anti_join(works)
+```
+```{r}
+professions %>%
+  left_join(dates) %>%
+  left_join(works)
+```
+```{r}
+url <- 'https://raw.githubusercontent.com/dearbharat/tidyverse/main/enrolment.csv'
+enrolment <- read_csv(url)
+```
+```{r}
+url <- 'https://raw.githubusercontent.com/dearbharat/tidyverse/main/survey.csv'
+survey <- read_csv(url)
+```
+```{r}
+enrolment %>% 
+  left_join(survey, by = "id")
+```
+```{r}
+enrolment %>% 
+  anti_join(survey, by = "id")
+```
+```{r}
+survey %>% 
+  anti_join(enrolment, by = "id")
+```
+```{r}
+url <- 'https://raw.githubusercontent.com/dearbharat/tidyverse/main/purchases.csv'
+purchases <- read_csv(url)
+```
+```{r}
+url <- 'https://raw.githubusercontent.com/dearbharat/tidyverse/main/prices.csv'
+prices <- read_csv(url)
+```
+```{r}
+purchases %>% 
+  left_join(prices)
+```
+```{r}
+purchases %>% 
+  left_join(prices) %>%
+  summarise(total_revenue = sum(price))
+```
+```{r}
+purchases %>% 
+  left_join(prices) %>%
+  group_by(customer_id) %>%
+  summarise(total_revenue = sum(price))
+```
+
