@@ -85,6 +85,11 @@ cat_lovers %>%
 library(lubridate, warn.conflicts=FALSE)
 ```
 ```{r}
+url<-'https://raw.githubusercontent.com/welcho2020/tidyverse/main/hotels.csv'
+hotels <- read_csv(url)
+```
+
+```{r}
 hotels %>%
   select(starts_with("arrival_"))
 ```
