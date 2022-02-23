@@ -11,6 +11,7 @@ x <- factor(c("BS", "MS", "PhD", "MS"))
 x
 ```
 ```{r}
+library(tidyverse)
 glimpse(x)
 ```
 ```{r}
