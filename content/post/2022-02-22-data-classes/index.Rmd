@@ -59,6 +59,12 @@ df %>%
 
 ## Read Data as Character Strings
 ```{r}
+library(tidyverse)
+url<-'https://raw.githubusercontent.com/welcho2020/tidyverse/main/cat-lovers.csv'
+cat_lovers <- read_csv(url)
+```
+
+```{r}
 glimpse(cat_lovers)
 ```
 
