@@ -6,3 +6,155 @@ slug: data-types
 categories: []
 tags: []
 ---
+```{r}
+library(tidyverse)
+url<-'https://raw.githubusercontent.com/welcho2020/tidyverse/main/cat-lovers.csv'
+cat_lovers <- read_csv(url)
+```
+```{r}
+cat_lovers %>%
+  summarise(mean_cats = mean(number_of_cats))
+```
+```{r}
+?mean
+```
+
+```{r}
+cat_lovers %>%
+  summarise(mean_cats = mean(number_of_cats, na.rm = TRUE))
+```
+
+```{r}
+glimpse(cat_lovers)
+```
+
+```{r}
+cat_lovers %>%
+  mutate(number_of_cats = case_when(
+    name == "Ginger Clark" ~ 2,
+    name == "Doug Bass"    ~ 3,
+    TRUE                   ~ as.numeric(number_of_cats)
+    )) %>%
+  summarise(mean_cats = mean(number_of_cats))
+```
+
+
+```{r}
+cat_lovers %>%
+  mutate(
+    number_of_cats = case_when(
+      name == "Ginger Clark" ~ "2",
+      name == "Doug Bass"    ~ "3",
+      TRUE                   ~ number_of_cats
+      ),
+    number_of_cats = as.numeric(number_of_cats)
+    ) %>%
+  summarise(mean_cats = mean(number_of_cats))
+```
+
+```{r}
+cat_lovers <- cat_lovers %>%
+  mutate(
+    number_of_cats = case_when(
+      name == "Ginger Clark" ~ 2,
+      name == "Doug Bass"    ~ 3,
+      TRUE                   ~ number_of_cats
+      ),
+    number_of_cats = as.numeric(number_of_cats)
+    )
+```
+
+## Data Types
+# Logical
+
+
+```{r}
+typeof(TRUE)
+```
+# Character
+```{r}
+typeof("hello")
+```
+# Double
+```{r}
+typeof(1.33545)
+```
+```{r}
+typeof(7)
+```
+# Integer
+```{r}
+typeof(7L)
+```
+```{r}
+typeof(1:3)
+```
+## Concatenation
+
+```{r}
+c(1, 2, 3)
+```
+```{r}
+c("Hello", "World!")
+```
+```{r}
+c(c("hi", "hello"), c("bye", "jello"))
+```
+# Converting between types
+```{r}
+x <- 1:3
+x
+```
+```{r}
+typeof(x)
+```
+```{r}
+y <- as.character(x)
+y
+```
+```{r}
+typeof(y)
+```
+```{r}
+x <- c(TRUE, FALSE)
+x
+```
+```{r}
+typeof(x)
+```
+```{r}
+y <- as.numeric(x)
+y
+```
+
+```{r}
+typeof(y)
+```
+```{r}
+c(1, "Hello")
+```
+```{r}
+c(FALSE, 3L)
+```
+```{r}
+c(1.2, 3L)
+```
+```{r}
+c(2L, "two")
+```
+
+## NA's Are Special
+```{r}
+x <- c(1, 2, 3, 4, NA)
+mean(x)
+```
+```{r}
+mean(x, na.rm = TRUE)
+```
+```{r}
+summary(x)
+```
+```{r}
+typeof(NA)
+```
+## NA is unknown, so it could be TRUE or FALSE
