@@ -6,3 +6,128 @@ slug: data-classes
 categories: []
 tags: []
 ---
+```{r}
+x <- factor(c("BS", "MS", "PhD", "MS"))
+x
+```
+```{r}
+glimpse(x)
+```
+```{r}
+as.integer(x)
+```
+## Date
+```{r}
+y <- as.Date("2020-01-01")
+y
+```
+```{r}
+typeof(y)
+```
+```{r}
+class(y)
+```
+## Data Frames
+```{r}
+df <- data.frame(x = 1:2, y = 3:4)
+df
+```
+```{r}
+typeof(df)
+```
+```{r}
+class(df)
+```
+## Lists
+```{r}
+l <- list(
+  x = 1:4,
+  y = c("hi", "hello", "jello"),
+  z = c(TRUE, FALSE)
+)
+l
+```
+## Pull
+```{r}
+df
+```
+```{r}
+df %>%
+  pull(y)
+```
+
+## Read Data as Character Strings
+```{r}
+glimpse(cat_lovers)
+```
+
+##Coerce When Plotting
+```{r}
+ggplot(cat_lovers, mapping = aes(x = handedness)) +
+  geom_bar()
+```
+## Use Forcats to Manipulate Factors
+```{r}
+cat_lovers %>%
+  mutate(handedness = fct_infreq(handedness)) %>%
+  ggplot(mapping = aes(x = handedness)) +
+  geom_bar()
+```
+## Working with Dates
+```{r}
+install.packages("tidyverse")
+```
+```{r}
+library(lubridate, warn.conflicts=FALSE)
+```
+```{r}
+hotels %>%
+  select(starts_with("arrival_"))
+```
+```{r}
+library(glue)
+hotels %>%
+  mutate(
+    arrival_date = glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}")
+    ) %>% 
+  relocate(arrival_date)
+```
+```{r}
+hotels %>%
+  mutate(arrival_date = glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}")) %>%
+  count(arrival_date)
+```
+```{r}
+hotels %>%
+  mutate(arrival_date = glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}")) %>%
+  count(arrival_date) %>%
+  ggplot(aes(x = arrival_date, y = n, group = 1)) +
+  geom_line()
+```
+```{r}
+hotels %>%
+  mutate(
+    arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))
+    ) %>% 
+  relocate(arrival_date)
+```
+```{r}
+hotels %>%
+  mutate(arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))) %>% 
+  count(arrival_date)
+```
+```{r}
+hotels %>%
+  mutate(arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))) %>% 
+  count(arrival_date) %>%
+  ggplot(aes(x = arrival_date, y = n, group = 1)) +
+  geom_line()
+```
+```{r}
+hotels %>%
+  mutate(arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))) %>% 
+  count(arrival_date) %>%
+  ggplot(aes(x = arrival_date, y = n, group = 1)) +
+  geom_smooth()
+```
+
