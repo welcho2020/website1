@@ -6,3 +6,155 @@ slug: data-io
 categories: []
 tags: []
 ---
+```{r}
+library(tidyverse)
+df <- tribble(
+  ~x, ~y,
+  1,  "a",
+  2,  "b",
+  3,  "c"
+)
+write_csv(df, file = "df.csv")
+```
+```{r}
+read_csv("df.csv")
+```
+```{r}
+url<-'https://raw.githubusercontent.com/welcho2020/tidyverse/main/edibnb-badnames.csv'
+edibnb_badnames <- read_csv(url)
+names(edibnb_badnames)
+```
+# R doesn't allow spaces in variable names
+## Option 1 Define Columns
+```{r}
+edibnb_col_names <- read_csv(url,
+                             col_names = c("id", "price", 
+                                           "neighbourhood", "accommodates",
+                                           "bathroom", "bedroom", 
+                                           "bed", "review_scores_rating", 
+                                           "n_reviews", "url"))
+names(edibnb_col_names)
+```
+## Option 2 - Format text to snake_case
+```{r}
+edibnb_clean_names <- read_csv(url) %>%
+  janitor::clean_names()
+names(edibnb_clean_names)
+```
+# Variable types
+```{r}
+df_na <- 'https://raw.githubusercontent.com/welcho2020/tidyverse/main/df-na.csv'
+read_csv(df_na)
+```
+## Option 1. Explicit NAs
+```{r}
+read_csv(df_na, 
+         na = c("", "NA", ".", "9999", "Not applicable"))
+```
+## Option 2. Specify column types
+```{r}
+read_csv(df_na, col_types = list(col_double(), 
+                                            col_character(), 
+                                            col_character()))
+```
+# Column types
+##type function	data type
+##col_character()	character
+##col_date()	date
+##col_datetime()	POSIXct (date-time)
+##col_double()	double (numeric)
+##col_factor()	factor
+##col_guess()	let readr guess (default)
+##col_integer()	integer
+##col_logical()	logical
+##col_number()	numbers mixed with non-number characters
+##col_numeric()	double or integer
+##col_skip()	do not read
+##col_time()	time
+
+#Case study: Favourite foods
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+
+```{r}
+library(readxl)
+fav_food <- read_excel("/Users/owenwelch/Desktop/website1/favourite-food.xlsx")
+fav_food
+```
+
+## Variable names
+
+```{r}
+fav_food <- read_excel("/Users/owenwelch/Desktop/website1/favourite-food.xlsx") %>%
+  janitor::clean_names()
+fav_food
+```
+
+## Handling NAs
+```{r}
+fav_food <- read_excel("/Users/owenwelch/Desktop/website1/favourite-food.xlsx",
+                       na = c("N/A", "99999")) %>%
+  janitor::clean_names()
+fav_food
+```
+## Make age numeric
+```{r}
+
+fav_food <- fav_food %>%
+  mutate(
+    age = if_else(age == "five", "5", age),
+    age = as.numeric(age)
+    )
+glimpse(fav_food)
+```
+## Socio-economic status
+```{r}
+fav_food %>%
+  count(ses)
+```
+## Make ses factor
+```{r}
+fav_food <- fav_food %>%
+  mutate(ses = fct_relevel(ses, "Low", "Middle", "High"))
+fav_food %>%
+  count(ses)
+```
+## Putting it altogether
+```{r}
+fav_food <- read_excel("/Users/owenwelch/Desktop/website1/favourite-food.xlsx", na = c("N/A", "99999")) %>%
+  janitor::clean_names() %>%
+  mutate(
+    age = if_else(age == "five", "5", age), 
+    age = as.numeric(age),
+    ses = fct_relevel(ses, "Low", "Middle", "High")
+  )
+fav_food
+```
+## Out and back in
+```{r}
+write_csv(fav_food, file = "/Users/owenwelch/Desktop/website1/favourite-food.xlsx")
+fav_food_clean <- read_csv("/Users/owenwelch/Desktop/website1/favourite-food.xlsx")
+```
+
+## read_rds() and write_rds()
+###read_rds(path), write_rds(x, path)
+
+## Out and back in, take 2
+```{r}
+write_rds(fav_food, file = "/Users/owenwelch/Desktop/website1/favourite-food.xlsx")
+fav_food_clean <- read_rds("/Users/owenwelch/Desktop/website1/favourite-food.xlsx")
+fav_food_clean %>%
+  count(ses)
+```
+## Other types of data
+###googlesheets4: Google Sheets
+###haven: SPSS, Stata, and SAS files
+###DBI, along with a database specific backend (e.g. RMySQL, RSQLite, RPostgreSQL etc): allows you to run SQL queries against a database and return a data frame
+###jsonline: JSON
+###xml2: xml
+###rvest: web scraping
+###httr: web APIs
+###sparklyr: data loaded into spark
